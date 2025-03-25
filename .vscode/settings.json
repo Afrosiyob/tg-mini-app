@@ -1,0 +1,50 @@
+{
+  "cSpell.words": [
+    "Afrosiyob",
+    "antd",
+    "BNFL",
+    "bnpl",
+    "browserslist",
+    "camelcase",
+    "commitlint",
+    "cssnano",
+    "extmod",
+    "extmods",
+    "Formik",
+    "lgota",
+    "localforage",
+    "mxik",
+    "necolas",
+    "opentype",
+    "pageable",
+    "plopfile",
+    "stylelint",
+    "svgr",
+    "Svgs",
+    "testid",
+    "truetype",
+    "TTFB"
+  ],
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.minimap.enabled": true,
+  "explorer.compactFolders": false,
+  "files.trimTrailingWhitespace": true,
+  // "files.exclude": {
+  //   "**/.git": true,
+  //   "**/.svn": true,
+  //   "**/.hg": true,
+  //   "**/CVS": true,
+  //   "**/.DS_Store": true,
+  //   "**/Thumbs.db": true,
+  //   "**/node_modules": true,
+  //   "**/package-lock.json": true
+  // },
+  "material-icon-theme.activeIconPack": "react",
+  "[scss]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  }
+}

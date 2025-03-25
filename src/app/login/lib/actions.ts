@@ -1,6 +1,6 @@
 import { LoginSchema, FormState } from "@/app/login/lib/definitions";
 
-import { createSession, deleteSession } from "@/app/login/lib/session";
+import { createSession, deleteSession } from "@/app/login/lib/sessions";
 
 import { redirect } from "next/navigation";
 

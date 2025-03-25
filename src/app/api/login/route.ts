@@ -3,17 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 import http from "@/app/lib/axiosInstance";
 
-import get from "lodash/get";
+import * as Mappers from "@/app/login/lib/mappers";
 
-export const Tokens = (
-  item?: unknown
-): {
-  accessToken: string;
-  refreshToken: string;
-} => ({
-  accessToken: get(item, "accessToken") || "",
-  refreshToken: get(item, "refreshToken") || "",
-});
+import get from "lodash/get";
 
 export async function GET() {
   return NextResponse.json({ message: "hello get" });
@@ -37,7 +29,7 @@ export async function POST(request: NextRequest) {
       password: string;
     });
 
-    const item = Tokens(get(data, "data"));
+    const item = Mappers.Tokens(get(data, "data"));
 
     return new NextResponse(JSON.stringify(item), {
       headers: {

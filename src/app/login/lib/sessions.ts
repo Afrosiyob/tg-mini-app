@@ -5,14 +5,12 @@
 
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
+import * as Types from "@/app/login/lib/types";
 
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
-
-export interface Tokens {
-  accessToken: string;
-  refreshToken: string;
-}
 
 export async function encrypt(payload: any) {
   return new SignJWT(payload)
@@ -33,7 +31,22 @@ export async function decrypt(session: string | undefined = "") {
   }
 }
 
-export async function createSession({ tokens }: { tokens: Tokens }) {
+export async function verifySession() {
+  const cookie = (await cookies()).get("session")?.value;
+  const session = await decrypt(cookie);
+
+  if (!session?.accessToken && !session?.refreshToken) {
+    redirect("/login");
+  } else {
+    redirect("/dashboard");
+  }
+}
+
+export async function createSession({
+  tokens,
+}: {
+  tokens: Types.IEntity.Tokens;
+}) {
   const cookieStore = await cookies();
 
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);

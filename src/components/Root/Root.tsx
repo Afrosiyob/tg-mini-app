@@ -1,25 +1,22 @@
-"use client";
+'use client';
 
-import { type PropsWithChildren, useEffect } from "react";
-import {
-  initData,
-  miniApp,
-  useLaunchParams,
-  useSignal,
-} from "@telegram-apps/sdk-react";
+import { type PropsWithChildren, useEffect } from 'react';
+import { initData, miniApp, useLaunchParams, useSignal } from '@telegram-apps/sdk-react';
 
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { ErrorPage } from "@/components/ErrorPage";
-import { useTelegramMock } from "@/hooks/useTelegramMock";
-import { useDidMount } from "@/hooks/useDidMount";
-import { useClientOnce } from "@/hooks/useClientOnce";
-import { setLocale } from "@/i18n/locale";
-import { init } from "@/core/init";
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorPage } from '@/components/ErrorPage';
+import { useTelegramMock } from '@/hooks/useTelegramMock';
+import { useDidMount } from '@/hooks/useDidMount';
+import { useClientOnce } from '@/hooks/useClientOnce';
+import { setLocale } from '@/i18n/locale';
+import { init } from '@/core/init';
 
-import { AppRoot } from "@telegram-apps/telegram-ui";
+import { AppRoot } from '@telegram-apps/telegram-ui';
+
+import Providers from '@/providers/Root';
 
 function RootInner({ children }: PropsWithChildren) {
-  const isDev = process.env.NODE_ENV === "development";
+  const isDev = process.env.NODE_ENV === 'development';
 
   if (isDev) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -27,7 +24,7 @@ function RootInner({ children }: PropsWithChildren) {
   }
 
   const lp = useLaunchParams();
-  const debug = isDev || lp.startParam === "debug";
+  const debug = isDev || lp.startParam === 'debug';
 
   // Initialize the library.
   useClientOnce(() => {
@@ -47,7 +44,11 @@ function RootInner({ children }: PropsWithChildren) {
     }
   }, [initDataUser]);
 
-  return <AppRoot>{children}</AppRoot>;
+  return (
+    <AppRoot>
+      <Providers>{children}</Providers>
+    </AppRoot>
+  );
 }
 
 export function Root(props: PropsWithChildren) {

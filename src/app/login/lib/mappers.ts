@@ -1,4 +1,4 @@
-import get from "lodash/get";
+import get from 'lodash/get';
 
 export const Tokens = (
   item?: unknown
@@ -6,6 +6,6 @@ export const Tokens = (
   accessToken: string;
   refreshToken: string;
 } => ({
-  accessToken: get(item, "accessToken") || "",
-  refreshToken: get(item, "refreshToken") || "",
+  accessToken: get(item, 'accessToken') || '',
+  refreshToken: get(item, 'refreshToken') || ''
 });

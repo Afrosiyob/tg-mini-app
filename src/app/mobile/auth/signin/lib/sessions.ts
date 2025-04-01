@@ -28,24 +28,24 @@ export async function decrypt(session: string | undefined = '') {
   }
 }
 
-export async function verifySession() {
-  const cookie = (await cookies()).get('session')?.value;
+export async function verifyTokenSession() {
+  const cookie = (await cookies()).get('token-session')?.value;
   const session = await decrypt(cookie);
 
   if (!session?.accessToken && !session?.refreshToken) {
-    redirect('/login');
+    redirect('/mobile/auth/signin');
   } else {
-    redirect('/dashboard');
+    redirect('/mobile/dashboard');
   }
 }
 
-export async function createSession({ tokens }: { tokens: Types.IEntity.Tokens }) {
+export async function createTokenSession({ tokens }: { tokens: Types.IEntity.Tokens }) {
   const cookieStore = await cookies();
 
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const session = await encrypt(tokens);
 
-  cookieStore.set('session', session, {
+  cookieStore.set('token-session', session, {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
@@ -54,8 +54,8 @@ export async function createSession({ tokens }: { tokens: Types.IEntity.Tokens }
   });
 }
 
-export async function updateSession() {
-  const session = (await cookies()).get('session')?.value;
+export async function updateTokenSession() {
+  const session = (await cookies()).get('token-session')?.value;
 
   const payload = await decrypt(session);
 
@@ -66,7 +66,7 @@ export async function updateSession() {
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
   const cookieStore = await cookies();
-  cookieStore.set('session', session, {
+  cookieStore.set('token-session', session, {
     httpOnly: true,
     secure: true,
     expires: expires,
@@ -75,8 +75,28 @@ export async function updateSession() {
   });
 }
 
-export async function deleteSession() {
+export async function deleteTokenSession() {
   const cookieStore = await cookies();
 
-  cookieStore.delete('session');
+  cookieStore.delete('token-session');
+}
+
+export async function createVerifyIdSession({ verifyId }: { verifyId: string }) {
+  const cookieStore = await cookies();
+
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+  cookieStore.set('verify-id-session', verifyId, {
+    httpOnly: true,
+    secure: true,
+    expires: expiresAt,
+    sameSite: 'lax',
+    path: '/'
+  });
+}
+
+export async function deleteVerifyIdSession() {
+  const cookieStore = await cookies();
+
+  cookieStore.delete('verify-id-session');
 }

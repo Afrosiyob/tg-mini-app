@@ -1,12 +1,14 @@
-"use client";
+'use client';
 
-import React, { useActionState } from "react";
-import { loginAction } from "@/app/login/lib/actions";
+import React, { useActionState } from 'react';
+import { loginAction } from '@/app/login/lib/actions';
 
-import { Button, Input, Link } from "@telegram-apps/telegram-ui";
+import { Button, Input, Link } from '@telegram-apps/telegram-ui';
 
 const Login = () => {
-  const [state, action, pending] = useActionState(loginAction, undefined);
+  const [state, action, pending] = useActionState(loginAction, {
+    message: ''
+  });
 
   return (
     <div>
@@ -18,12 +20,7 @@ const Login = () => {
         {state?.errors?.username && <p>{state.errors.username}</p>}
         <div>
           <label htmlFor="password">password</label>
-          <Input
-            header="password"
-            id="password"
-            name="password"
-            type="password"
-          />
+          <Input header="password" id="password" name="password" type="password" />
         </div>
         {state?.errors?.password && <p>{state.errors.password}</p>}
 
@@ -32,6 +29,7 @@ const Login = () => {
         </Button>
 
         <Link href="/registration">Registration</Link>
+        <Link href="/mobile/auth/signin">sign in</Link>
       </form>
     </div>
   );

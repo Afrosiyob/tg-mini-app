@@ -1,6 +1,15 @@
-/* eslint-disable @typescript-eslint/no-namespace */
-
 export declare namespace IApi {
+  export namespace Login {
+    export interface Request {
+      username: string;
+      password: string;
+    }
+
+    export interface Response {
+      accessToken: string;
+      refreshToken: string;
+    }
+  }
   export namespace List {
     export interface Response {
       data: Data[];
@@ -56,6 +65,20 @@ export declare namespace IQuery {
 }
 
 export declare namespace IForm {
+  export interface Login {
+    username: string;
+    password: string;
+  }
+
+  export type FormState =
+    | {
+        errors?: {
+          username?: string[];
+          password?: string[];
+        };
+        message?: string;
+      }
+    | undefined;
   export interface Create {
     title: {
       uz: string;
@@ -88,13 +111,13 @@ export interface IParams {
   perPage?: number;
   sort?: {
     key?: string;
-    direction?: "ASC" | "DESC";
+    direction?: 'ASC' | 'DESC';
   };
   filter?: IFilter[];
 }
 
 export interface IFilter {
   key: string;
-  operation: ">" | ">=" | "<" | "<=" | "=" | "!=";
+  operation: '>' | '>=' | '<' | '<=' | '=' | '!=';
   value: string | number | boolean;
 }

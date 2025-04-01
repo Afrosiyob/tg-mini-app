@@ -1,18 +1,14 @@
-import axios, {
-  AxiosInstance,
-  AxiosRequestConfig,
-  InternalAxiosRequestConfig,
-} from "axios";
-import merge from "lodash/merge";
+import axios, { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
+import merge from 'lodash/merge';
 
 class Http {
   private instance!: AxiosInstance;
 
   private defaults: AxiosRequestConfig = {
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json; charset=utf-8",
-    },
+      Accept: 'application/json',
+      'Content-Type': 'application/json; charset=utf-8'
+    }
   };
 
   private get http(): AxiosInstance {
@@ -21,26 +17,20 @@ class Http {
 
   public init({
     config,
-    configFn,
+    configFn
   }: {
     config?: AxiosRequestConfig;
-    configFn?: (
-      config: AxiosRequestConfig
-    ) => AxiosRequestConfig | Promise<AxiosRequestConfig>;
+    configFn?: (config: AxiosRequestConfig) => AxiosRequestConfig | Promise<AxiosRequestConfig>;
   } = {}) {
     const http = axios.create(merge(this.defaults, config));
 
     http.interceptors.request.use(
-      (
-        config: InternalAxiosRequestConfig
-      ): InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig> => {
+      (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig> => {
         if (configFn) {
           const requestConfig = configFn(config);
 
           if (requestConfig instanceof Promise) {
-            return requestConfig.then((newConfig) =>
-              Promise.resolve(merge(config, newConfig))
-            );
+            return requestConfig.then(newConfig => Promise.resolve(merge(config, newConfig)));
           }
 
           return merge(config, requestConfig || {});
@@ -48,7 +38,7 @@ class Http {
 
         return config;
       },
-      (error) => Promise.reject(error)
+      error => Promise.reject(error)
     );
 
     this.instance = http;
@@ -79,10 +69,11 @@ httpInstance.init({
   config: {
     baseURL: baseUrl,
     headers: {
-      "client-id": clientId,
-      "client-secret": clientSecret,
-    },
-  },
+      'client-id': clientId,
+      'client-secret': clientSecret,
+      'Accept-Language': 'uz'
+    }
+  }
 });
 
 export default httpInstance;

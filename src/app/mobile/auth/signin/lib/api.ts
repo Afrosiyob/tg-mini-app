@@ -2,29 +2,19 @@ import * as Types from '@/app/mobile/auth/signin/lib/types';
 import { AxiosPromise } from 'axios';
 import axios from 'axios';
 
-export const GetOtp = ({
-  values,
-  device
-}: {
-  values: Types.IForm.GetOtp;
-  device: Types.IEntity.Device;
-}): AxiosPromise<Types.IApi.GetOtp.Response> =>
-  axios.post('/api/mobile/auth/sign-in', {
+export const GetOtp = ({ values }: { values: Types.IForm.GetOtp }): AxiosPromise<Types.IApi.GetOtp.Response> =>
+  axios.post('/api/mobile/auth/sign-in-get-otp', {
     phone: values.phone,
-    password: values.password,
-    device: device
+    password: values.password
   } as Types.IApi.GetOtp.Request);
 
 export const ConfirmOtp = ({
-  values,
-  verifyId
+  values
 }: {
   values: Types.IForm.ConfirmOtp;
-  verifyId: string;
 }): AxiosPromise<Types.IApi.ConfirmOtp.Response> =>
-  axios.post('/api/mobile/auth/sign-in', {
-    verifyCode: values.verifyCode,
-    verifyId
+  axios.post('/api/mobile/auth/sign-in-confirm-otp', {
+    verifyCode: values.verifyCode
   } as Types.IApi.ConfirmOtp.Request);
 
 export const CheckPhone = ({

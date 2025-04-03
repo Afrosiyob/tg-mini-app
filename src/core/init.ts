@@ -6,12 +6,14 @@ import {
   initData,
   $debug,
   init as initSDK,
-} from "@telegram-apps/sdk-react";
+  closingBehavior,
+  swipeBehavior
+} from '@telegram-apps/sdk-react';
 
 /**
  * Initializes the application and configures its dependencies.
  */
-export function init(debug: boolean): void {
+export async function init(debug: boolean): Promise<void> {
   // Set @telegram-apps/sdk-react debug mode.
   $debug.set(debug);
 
@@ -19,10 +21,12 @@ export function init(debug: boolean): void {
   // Also, configure the package.
   initSDK();
 
-  // Mount all components used in the project.
-  if (backButton.isSupported()) {
-    backButton.mount();
-  }
+  // working
+  closingBehavior.mount();
+  closingBehavior.enableConfirmation();
+
+  // working
+  backButton.mount();
 
   miniApp.mount();
 
@@ -30,13 +34,16 @@ export function init(debug: boolean): void {
 
   initData.restore();
 
+  // working
+  swipeBehavior.mount();
+
   void viewport
     .mount()
     .then(() => {
       viewport.bindCssVars();
     })
-    .catch((e) => {
-      console.error("Something went wrong mounting the viewport", e);
+    .catch(e => {
+      console.error('Something went wrong mounting the viewport', e);
     });
 
   // Define components-related CSS variables.

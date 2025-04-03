@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "bot:dev": "ts-node bot/index.ts",
-    "dev:https": "next dev --experimental-https"
+    "dev:https": "next dev --experimental-https",
+    "dev:mkcert": "next dev --experimental-https --experimental-https-key=./certificates/192.168.2.77+3-key.pem --experimental-https-cert=./certificates/192.168.2.77+3.pem"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.69.0",
@@ -17,6 +18,7 @@
     "@telegram-apps/telegram-ui": "^2.1.8",
     "axios": "^1.8.4",
     "jose": "^6.0.10",
+    "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "next": "15.2.3",
     "next-intl": "^4.0.2",
@@ -24,6 +26,7 @@
     "react-dom": "^18.2.0",
     "telegraf": "^4.16.3",
     "ts-node": "^10.9.2",
+    "uuid": "^11.1.0",
     "yup": "^1.6.1"
   },
   "devDependencies": {

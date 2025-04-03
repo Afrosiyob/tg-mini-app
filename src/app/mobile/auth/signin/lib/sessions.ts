@@ -1,102 +1,127 @@
 'use server';
 
-import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { jwtDecode } from 'jwt-decode';
+import * as Types from '@/app/mobile/auth/signin/lib/types';
+import get from 'lodash/get';
 
-import * as Types from '@/app/login/lib/types';
+export async function verifyToken() {
+  const accessToken = (await cookies()).get('access-token')?.value;
 
-const secretKey = process.env.SESSION_SECRET;
-const encodedKey = new TextEncoder().encode(secretKey);
-
-export async function encrypt(payload: any) {
-  return new SignJWT(payload)
-    .setProtectedHeader({ alg: 'HS256' })
-    .setIssuedAt()
-    .setExpirationTime('7d')
-    .sign(encodedKey);
-}
-
-export async function decrypt(session: string | undefined = '') {
-  try {
-    const { payload } = await jwtVerify(session, encodedKey, {
-      algorithms: ['HS256']
-    });
-    return payload;
-  } catch (error) {
-    console.log('Failed to verify session');
-  }
-}
-
-export async function verifyTokenSession() {
-  const cookie = (await cookies()).get('token-session')?.value;
-  const session = await decrypt(cookie);
-
-  if (!session?.accessToken && !session?.refreshToken) {
+  if (!accessToken) {
     redirect('/mobile/auth/signin');
   } else {
     redirect('/mobile/dashboard');
   }
 }
 
-export async function createTokenSession({ tokens }: { tokens: Types.IEntity.Tokens }) {
+export async function createToken({ tokens }: { tokens: Types.IEntity.Tokens }) {
   const cookieStore = await cookies();
 
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const session = await encrypt(tokens);
 
-  cookieStore.set('token-session', session, {
+  const payloadAccessToken = jwtDecode(tokens.accessToken);
+
+  cookieStore.set('access-token', tokens.accessToken, {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
     sameSite: 'lax',
     path: '/'
   });
+
+  const payloadRefreshToken = jwtDecode(tokens.refreshToken);
+
+  cookieStore.set('refresh-token', tokens.refreshToken, {
+    httpOnly: true,
+    secure: true,
+    expires: expiresAt,
+    sameSite: 'lax',
+    path: '/'
+  });
+
+  redirect('/mobile/dashboard');
 }
 
-export async function updateTokenSession() {
-  const session = (await cookies()).get('token-session')?.value;
+export async function updateAccessToken() {
+  const accessToken = (await cookies()).get('access-token')?.value;
 
-  const payload = await decrypt(session);
-
-  if (!session || !payload) {
+  if (!accessToken) {
     return null;
   }
 
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-
+  const payload = jwtDecode(accessToken);
   const cookieStore = await cookies();
-  cookieStore.set('token-session', session, {
+
+  cookieStore.set('access-token', accessToken, {
     httpOnly: true,
     secure: true,
-    expires: expires,
+    expires: get(payload, 'exp') || expires,
     sameSite: 'lax',
     path: '/'
   });
 }
 
-export async function deleteTokenSession() {
+export async function updateRefreshToken() {
+  const refreshToken = (await cookies()).get('refresh-token')?.value;
+
+  if (!refreshToken) {
+    return null;
+  }
+
+  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const payload = jwtDecode(refreshToken);
   const cookieStore = await cookies();
 
-  cookieStore.delete('token-session');
-}
-
-export async function createVerifyIdSession({ verifyId }: { verifyId: string }) {
-  const cookieStore = await cookies();
-
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-
-  cookieStore.set('verify-id-session', verifyId, {
+  cookieStore.set('refresh-token', refreshToken, {
     httpOnly: true,
     secure: true,
-    expires: expiresAt,
+    expires: get(payload, 'exp') || expires,
     sameSite: 'lax',
     path: '/'
   });
 }
 
-export async function deleteVerifyIdSession() {
+export async function createVerifyId({ verifyId }: { verifyId: string }) {
   const cookieStore = await cookies();
 
-  cookieStore.delete('verify-id-session');
+  cookieStore.set('verify-id', verifyId, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'lax',
+    path: '/'
+  });
+}
+
+export async function deleteVerifyId() {
+  const cookieStore = await cookies();
+
+  cookieStore.delete('verify-id');
+}
+
+export async function deleteAccessToken() {
+  const cookieStore = await cookies();
+
+  cookieStore.delete('access-token');
+}
+
+export async function deleteRefreshToken() {
+  const cookieStore = await cookies();
+
+  cookieStore.delete('refresh-token');
+}
+
+export async function deleteDeviceToken() {
+  const cookieStore = await cookies();
+
+  cookieStore.delete('device-token');
+}
+
+export async function logout() {
+  const cookieStore = await cookies();
+
+  cookieStore.delete('refresh-token');
+  cookieStore.delete('access-token');
 }

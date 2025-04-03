@@ -1,14 +1,14 @@
-import type { PropsWithChildren } from "react";
-import type { Metadata } from "next";
-import { Root } from "@/components/Root/Root";
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
+import type { PropsWithChildren } from 'react';
+import type { Metadata } from 'next';
+import { Root } from '@/components/Root/Root';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 
-import "@telegram-apps/telegram-ui/dist/styles.css";
+import '@telegram-apps/telegram-ui/dist/styles.css';
 
 export const metadata: Metadata = {
-  title: "Your Application Title Goes Here",
-  description: "Your application description goes here",
+  title: 'Your Application Title Goes Here',
+  description: 'Your application description goes here'
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {

@@ -1,15 +1,10 @@
-import {
-  createTokenSession,
-  deleteTokenSession,
-  deleteVerifyIdSession,
-  createVerifyIdSession
-} from '@/app/mobile/auth/signin/lib/sessions';
+import * as Sessions from '@/app/mobile/auth/signin/lib/sessions';
 
-import * as Types from '@/app/mobile/auth/signin/lib/types';
 import * as yup from 'yup';
 import { redirect } from 'next/navigation';
 import { GetOtp, CheckPhone, ConfirmOtp } from '@/app/mobile/auth/signin/lib/api';
 
+import http from '@/app/lib/axiosInstance';
 export async function CheckPhoneAction({ phone }: { phone: string }) {
   const { data: item } = await CheckPhone({
     values: {
@@ -22,7 +17,16 @@ export async function CheckPhoneAction({ phone }: { phone: string }) {
   }
 }
 
-export async function GetOtpAction(state: Types.IForm.GetOtpFormState, formData: FormData) {
+export type GetOtpActionState = {
+  phone?: string;
+  password?: string;
+  errors?: {
+    phone?: string[];
+    password?: string[];
+  };
+};
+
+export async function GetOtpAction(_prevState: GetOtpActionState, formData: FormData): Promise<GetOtpActionState> {
   const Schema = yup.object().shape({
     phone: yup.string().required(),
     password: yup.string().min(5).required()
@@ -42,36 +46,34 @@ export async function GetOtpAction(state: Types.IForm.GetOtpFormState, formData:
     };
   }
 
+  const phone = (formData.get('phone') as string) || '';
+  const password = (formData.get('password') as string) || '';
+
   const { data: item } = await GetOtp({
     values: {
-      phone: (formData.get('phone') as string) || '',
-      password: (formData.get('password') as string) || ''
-    },
-    device: {
-      token: 'token',
-      deviceOs: 'deviceOs',
-      model: 'model',
-      osVersion: 'osVersion',
-      appVersion: 'appVersion'
+      phone,
+      password
     }
   });
 
-  console.log({ item });
-
-  if (!item.verifyId) {
-    return {
-      message: 'verifyId is empty'
-    };
-  }
-
-  await createVerifyIdSession({
+  await Sessions.createVerifyId({
     verifyId: item.verifyId
   });
 
-  redirect('/mobile/dashboard');
+  return { phone, password };
 }
 
-export async function ConfirmOtpAction(state: Types.IForm.ConfirmOtpFormState, formData: FormData) {
+export type ConfirmOtpActionState = {
+  verifyCode?: string;
+  errors?: {
+    verifyCode?: string[];
+  };
+};
+
+export async function ConfirmOtpAction(
+  _prevState: ConfirmOtpActionState,
+  formData: FormData
+): Promise<ConfirmOtpActionState> {
   const Schema = yup.object().shape({
     verifyCode: yup.string().required()
   });
@@ -83,36 +85,35 @@ export async function ConfirmOtpAction(state: Types.IForm.ConfirmOtpFormState, f
   if (!validatedFields) {
     return {
       errors: {
-        verifyCode: ['invalid username']
+        verifyCode: ['invalid verifyCode']
       }
     };
   }
 
+  const verifyCode = (formData.get('verifyCode') as string) || '';
+
   const { data: item } = await ConfirmOtp({
     values: {
-      verifyCode: (formData.get('verifyCode') as string) || ''
-    },
-    verifyId: '123'
+      verifyCode
+    }
   });
 
-  console.log({ item });
+  await Sessions.deleteVerifyId();
 
-  if (!item.accessToken && !item.refreshToken) {
-    return {
-      message: 'token is empty'
-    };
-  }
-
-  await deleteVerifyIdSession();
-
-  await createTokenSession({
+  await Sessions.createToken({
     tokens: { accessToken: item.accessToken, refreshToken: item.refreshToken }
   });
 
-  redirect('/mobile/dashboard');
+  http.setAccessToken(item.accessToken);
+
+  return {
+    verifyCode
+  };
 }
 
 export async function LogoutAction() {
-  deleteTokenSession();
+  await Sessions.logout();
+  await Sessions.deleteVerifyId();
+
   redirect('/mobile/auth/signin');
 }

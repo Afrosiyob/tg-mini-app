@@ -70,8 +70,7 @@ httpInstance.init({
     baseURL: baseUrl,
     headers: {
       'client-id': clientId,
-      'client-secret': clientSecret,
-      'Accept-Language': 'uz'
+      'client-secret': clientSecret
     }
   }
 });

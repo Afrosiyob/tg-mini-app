@@ -4,9 +4,6 @@ import { cookies } from 'next/headers';
 
 import { v4 as uuidv4 } from 'uuid';
 
-const secretKeyDevice = process.env.DEVICE_TOKEN_SECRET;
-const encodedKeyDevice = new TextEncoder().encode(secretKeyDevice);
-
 // 1. Specify protected and public routes
 const protectedRoutes = ['/mobile/dashboard'];
 const publicRoutes = ['/mobile/auth/signin', '/mobile/auth/signup', '/'];

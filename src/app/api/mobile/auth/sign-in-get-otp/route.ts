@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse, userAgent } from 'next/server';
 
-import http from '@/app/lib/axiosInstance';
+import http from '@/services/http';
 import { cookies } from 'next/headers';
 import get from 'lodash/get';
 

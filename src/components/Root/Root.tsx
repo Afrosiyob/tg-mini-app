@@ -33,7 +33,13 @@ function RootInner({ children }: PropsWithChildren) {
 
   const isDark = useSignal(miniApp.isDark);
 
-  console.log(isDark);
+  useEffect(() => {
+    if (isDark) {
+      miniApp.setBackgroundColor('#000000');
+    } else {
+      miniApp.setBackgroundColor('#FFFFFF');
+    }
+  }, [isDark]);
 
   const initDataUser = useSignal(initData.user);
 

@@ -1,7 +1,8 @@
+import { BackPage } from '@/components/BackPage';
 import React from 'react';
 
 const Page: React.FC = () => {
-  return <div>Page</div>;
+  return <BackPage back>Page</BackPage>;
 };
 
 export default Page;

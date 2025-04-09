@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
-import * as Types from '@/app/mobile/auth/signin/lib/types';
+import * as Types from './types';
 import get from 'lodash/get';
 
 export async function verifyToken() {

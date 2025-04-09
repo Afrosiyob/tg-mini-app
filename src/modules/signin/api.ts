@@ -1,4 +1,4 @@
-import * as Types from '@/app/mobile/auth/signin/lib/types';
+import * as Types from './types';
 import { AxiosPromise } from 'axios';
 import axios from 'axios';
 

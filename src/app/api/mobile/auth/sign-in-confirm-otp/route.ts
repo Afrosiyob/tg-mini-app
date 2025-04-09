@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import http from '@/app/lib/axiosInstance';
+import http from '@/services/http';
 import { cookies } from 'next/headers';
 
 import get from 'lodash/get';

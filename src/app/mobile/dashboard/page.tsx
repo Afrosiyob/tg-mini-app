@@ -3,15 +3,16 @@
 import { Button } from '@telegram-apps/telegram-ui';
 import React from 'react';
 
-import { LogoutAction } from '@/app/mobile/auth/signin/lib/actions';
+import * as Actions from '@/modules/signin/actions';
 
 const Page: React.FC = () => {
   return (
     <div style={{ color: 'red' }}>
       mobile dashboard
       <Button
+        id="logout"
         onClick={() => {
-          LogoutAction();
+          Actions.Logout();
         }}
       >
         logout

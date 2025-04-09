@@ -104,6 +104,34 @@ export declare namespace IQuery {
   }
 }
 
+export declare namespace Actions {
+  export interface Response {
+    isError: boolean;
+    isSuccess: boolean;
+    isLoading: boolean;
+    isValid: boolean;
+  }
+
+  export interface GetOtp extends Response {
+    errors?: {
+      phone?: string[];
+      password?: string[];
+    };
+  }
+
+  export interface ConfirmOtp extends Response {
+    errors?: {
+      verifyCode?: string[];
+    };
+  }
+
+  export interface CheckPhone extends Response {
+    errors?: {
+      phone?: string[];
+    };
+  }
+}
+
 export declare namespace IForm {
   export interface CheckPhone {
     phone: string;

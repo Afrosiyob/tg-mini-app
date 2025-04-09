@@ -5,7 +5,7 @@ import { PropsWithChildren, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-export function Page({
+export function BackPage({
   children,
   back = true
 }: PropsWithChildren<{

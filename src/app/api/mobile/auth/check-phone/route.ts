@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import http from '@/app/lib/axiosInstance';
+import http from '@/services/http';
 
 import get from 'lodash/get';
-import * as Mappers from '@/app/mobile/auth/signin/lib/mappers';
+import * as Mappers from '@/modules/signin/mappers';
 
 export async function POST(request: NextRequest) {
   try {

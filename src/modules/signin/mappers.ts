@@ -1,6 +1,6 @@
 import get from 'lodash/get';
 
-import * as Types from '@/app/mobile/auth/signin/lib/types';
+import * as Types from './types';
 
 export const CheckPhone = (item?: unknown): Types.IEntity.CheckPhone => ({
   authRequireCellular: {

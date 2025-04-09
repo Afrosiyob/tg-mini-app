@@ -7,7 +7,8 @@ import {
   $debug,
   init as initSDK,
   closingBehavior,
-  swipeBehavior
+  swipeBehavior,
+  settingsButton
 } from '@telegram-apps/sdk-react';
 
 /**
@@ -21,8 +22,13 @@ export async function init(debug: boolean): Promise<void> {
   // Also, configure the package.
   initSDK();
 
+  settingsButton.mount();
+
+  settingsButton.show();
+
   // working
   closingBehavior.mount();
+
   closingBehavior.enableConfirmation();
 
   // working
@@ -50,4 +56,10 @@ export async function init(debug: boolean): Promise<void> {
   miniApp.bindCssVars();
 
   themeParams.bindCssVars();
+
+  // if (miniApp.setBackgroundColor.isAvailable()) {
+  //   miniApp.setBackgroundColor('#000000');
+  // }
+
+  themeParams.accentTextColor();
 }

@@ -3,7 +3,7 @@ import { AxiosPromise } from 'axios';
 import axios from 'axios';
 
 export const GetOtp = ({ values }: { values: Types.IForm.GetOtp }): AxiosPromise<Types.IApi.GetOtp.Response> =>
-  axios.post('/api/mobile/auth/sign-in-get-otp', {
+  axios.post('/api/auth/sign-in-get-otp', {
     phone: values.phone,
     password: values.password
   } as Types.IApi.GetOtp.Request);
@@ -13,8 +13,9 @@ export const ConfirmOtp = ({
 }: {
   values: Types.IForm.ConfirmOtp;
 }): AxiosPromise<Types.IApi.ConfirmOtp.Response> =>
-  axios.post('/api/mobile/auth/sign-in-confirm-otp', {
-    verifyCode: values.verifyCode
+  axios.post('/api/auth/sign-in-confirm-otp', {
+    verifyCode: values.verifyCode,
+    verifyId: values.verifyId
   } as Types.IApi.ConfirmOtp.Request);
 
 export const CheckPhone = ({
@@ -22,6 +23,6 @@ export const CheckPhone = ({
 }: {
   values: Types.IForm.CheckPhone;
 }): AxiosPromise<Types.IApi.CheckPhone.Response> =>
-  axios.post('/api/mobile/auth/check-phone', {
+  axios.post('/api/auth/check-phone', {
     phone: values.phone
   } as Types.IApi.CheckPhone.Request);

@@ -1,6 +1,6 @@
-export const TOKENS = '@@AUTH/TOKENS';
-export const LOGOUT = '@@AUTH/LOGOUT';
-export const PROFILE = '@@AUTH/PROFILE';
+export const TOKENS = '@@AUTH_SIGNIN/TOKENS';
+export const LOGOUT = '@@AUTH_SIGNIN/LOGOUT';
+export const PROFILE = '@@AUTH_SIGNIN/PROFILE';
 
 export enum STATUS {
   ACTIVE = 'ACTIVE',

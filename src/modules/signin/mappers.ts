@@ -10,3 +10,13 @@ export const CheckPhone = (item?: unknown): Types.IEntity.CheckPhone => ({
   },
   exists: get(item, 'exists') || false
 });
+
+export const GetOtp = (item?: unknown): Types.IEntity.GetOtp => ({
+  verifyId: get(item, 'verifyId') || '',
+  expires: get(item, 'expires') || 0
+});
+
+export const ConfirmOtp = (item?: unknown): Types.IEntity.ConfirmOtp => ({
+  accessToken: get(item, 'accessToken') || '',
+  refreshToken: get(item, 'refreshToken') || ''
+});

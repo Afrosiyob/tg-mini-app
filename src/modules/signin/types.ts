@@ -2,6 +2,7 @@ export declare namespace IApi {
   export namespace ConfirmOtp {
     export interface Request {
       verifyCode: string;
+      verifyId: string;
     }
 
     export type Response = {
@@ -31,7 +32,10 @@ export declare namespace IApi {
       password: string;
     }
 
-    export type Response = any;
+    export type Response = {
+      verifyId: string;
+      expires: number;
+    };
   }
   export namespace List {
     export interface Response {
@@ -46,6 +50,23 @@ export declare namespace IApi {
 
   export interface Data {
     id: string;
+  }
+}
+
+export declare namespace IContext {
+  export interface State {
+    verifyId: string;
+    verifyCode: string;
+  }
+
+  export interface Methods {
+    setValue: (values: any) => void;
+    clearValue: () => void;
+  }
+
+  export interface Value {
+    state: State;
+    methods: Methods;
   }
 }
 
@@ -74,6 +95,16 @@ export declare namespace IEntity {
 
   export interface Data {
     id: string;
+  }
+
+  export interface GetOtp {
+    verifyId: string;
+    expires: number;
+  }
+
+  export interface ConfirmOtp {
+    accessToken: string;
+    refreshToken: string;
   }
 
   export interface Meta {
@@ -107,15 +138,14 @@ export declare namespace IQuery {
 export declare namespace Actions {
   export interface Response {
     isError?: boolean;
-    isSuccess?: boolean;
     isLoading?: boolean;
     isValid?: boolean;
   }
 
   export interface GetOtp extends Response {
     errors?: {
-      phone?: string[];
-      password?: string[];
+      phone?: string;
+      password?: string;
     };
   }
 
@@ -144,35 +174,8 @@ export declare namespace IForm {
 
   export interface ConfirmOtp {
     verifyCode: string;
+    verifyId: string;
   }
-
-  export type CheckPhoneFormState = {
-    errors?:
-      | {
-          phone?: string[];
-          message?: string;
-        }
-      | undefined;
-  };
-
-  export type GetOtpFormState = {
-    errors?:
-      | {
-          phone?: string[];
-          password?: string[];
-          message?: string;
-        }
-      | undefined;
-  };
-
-  export type ConfirmOtpFormState = {
-    errors?:
-      | {
-          verifyCode?: string[];
-          message?: string;
-        }
-      | undefined;
-  };
 }
 
 export interface IParams {

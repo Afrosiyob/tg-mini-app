@@ -6,17 +6,17 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/',
-        destination: '/mobile/dashboard',
+        destination: '/dashboard',
         permanent: true
       },
       {
-        source: '/mobile',
-        destination: '/mobile/dashboard',
+        source: '/',
+        destination: '/dashboard',
         permanent: true
       },
       {
-        source: '/mobile/auth',
-        destination: '/mobile/auth/signin',
+        source: '/auth',
+        destination: '/auth/signin',
         permanent: true
       }
     ];

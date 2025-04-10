@@ -2,27 +2,29 @@ export declare namespace IApi {
   export namespace ConfirmOtp {
     export interface Request {
       verifyCode: string;
+      verifyId: string;
     }
 
     export type Response = {
-      accessToken: string;
-      refreshToken: string;
+      verifyId: string;
+      expires: number;
     };
   }
 
-  export namespace CheckPhone {
+  export namespace SetProfileInfo {
     export interface Request {
-      phone: string;
+      verifyId: string;
+      firstname: string;
+      lastname: string;
+      birthday: string;
+      gender: string;
+      image: string;
     }
 
-    export type Response = {
-      authRequireCellular: {
-        key: string;
-        type: string;
-        value: boolean;
-      };
-      exists: boolean;
-    };
+    export interface Response {
+      accessToken: string;
+      refreshToken: string;
+    }
   }
 
   export namespace GetOtp {
@@ -31,7 +33,10 @@ export declare namespace IApi {
       password: string;
     }
 
-    export type Response = any;
+    export type Response = {
+      verifyId: string;
+      expires: number;
+    };
   }
   export namespace List {
     export interface Response {
@@ -49,16 +54,28 @@ export declare namespace IApi {
   }
 }
 
-export declare namespace IEntity {
-  export interface CheckPhone {
-    authRequireCellular: {
-      key: string;
-      type: string;
-      value: boolean;
-    };
-    exists: boolean;
+export declare namespace IContext {
+  export interface State {
+    verifyId: string;
+    verifyCode: string;
   }
 
+  export interface Methods {
+    setValue: (values: any) => void;
+    clearValue: () => void;
+  }
+
+  export interface Value {
+    state: State;
+    methods: Methods;
+  }
+}
+
+export declare namespace IEntity {
+  export interface SetProfileInfo {
+    accessToken: string;
+    refreshToken: string;
+  }
   export interface Tokens {
     accessToken: string;
     refreshToken: string;
@@ -74,6 +91,16 @@ export declare namespace IEntity {
 
   export interface Data {
     id: string;
+  }
+
+  export interface GetOtp {
+    verifyId: string;
+    expires: number;
+  }
+
+  export interface ConfirmOtp {
+    verifyId: string;
+    expires: number;
   }
 
   export interface Meta {
@@ -106,10 +133,9 @@ export declare namespace IQuery {
 
 export declare namespace Actions {
   export interface Response {
-    isError: boolean;
-    isSuccess: boolean;
-    isLoading: boolean;
-    isValid: boolean;
+    isError?: boolean;
+    isLoading?: boolean;
+    isValid?: boolean;
   }
 
   export interface GetOtp extends Response {
@@ -125,16 +151,25 @@ export declare namespace Actions {
     };
   }
 
-  export interface CheckPhone extends Response {
+  export interface SetProfileInfo extends Response {
     errors?: {
-      phone?: string[];
+      firstname: string[];
+      lastname: string[];
+      birthday: string[];
+      gender: string[];
+      image: string[];
     };
   }
 }
 
 export declare namespace IForm {
-  export interface CheckPhone {
-    phone: string;
+  export interface SetProfileInfo {
+    verifyId: string;
+    firstname: string;
+    lastname: string;
+    birthday: string;
+    gender: string;
+    image: string;
   }
 
   export interface GetOtp {
@@ -144,35 +179,8 @@ export declare namespace IForm {
 
   export interface ConfirmOtp {
     verifyCode: string;
+    verifyId: string;
   }
-
-  export type CheckPhoneFormState = {
-    errors?:
-      | {
-          phone?: string[];
-          message?: string;
-        }
-      | undefined;
-  };
-
-  export type GetOtpFormState = {
-    errors?:
-      | {
-          phone?: string[];
-          password?: string[];
-          message?: string;
-        }
-      | undefined;
-  };
-
-  export type ConfirmOtpFormState = {
-    errors?:
-      | {
-          verifyCode?: string[];
-          message?: string;
-        }
-      | undefined;
-  };
 }
 
 export interface IParams {

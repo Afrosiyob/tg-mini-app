@@ -7,61 +7,54 @@ import * as Types from '../types';
 import * as yup from 'yup';
 
 export interface IProps {
-  onSuccess?: (data: any) => void;
+  onSuccess?: (data: Types.IEntity.GetOtp) => void;
   onError?: (error: string) => void;
   onLoading?: (loading: boolean) => void;
-  onSettled?: (data: any) => void;
+  onSettled?: (data: Types.IEntity.GetOtp) => void;
   children(props: { state: Types.Actions.GetOtp; pending: boolean }): React.ReactNode;
 }
 
 const GetOtp: React.FC<IProps> = ({ children, onError, onSuccess, onLoading, onSettled }) => {
+  const initialState: Types.Actions.GetOtp = {
+    errors: {}
+  };
+
   const [state, action, pending] = useActionState(
     async (_prevState: Types.Actions.GetOtp, formData: FormData): Promise<Types.Actions.GetOtp> => {
-      const phone = (formData.get('phone') as string) || '';
-      const password = (formData.get('password') as string) || '';
+      const values = {
+        phone: (formData.get('phone') as string) || '',
+        password: (formData.get('password') as string) || ''
+      };
+
+      const errorMessages: Record<string, string> = {};
 
       const Schema = yup.object().shape({
-        phone: yup.string().required(),
+        phone: yup.string().min(5).required(),
         password: yup.string().min(5).required()
       });
 
-      const validatedFields = Schema.isValid({
-        phone,
-        password
-      });
-
-      if (!validatedFields) {
-        return {
-          errors: {
-            phone: ['invalid username'],
-            password: ['invalid password']
-          },
-          isValid: false,
-          isError: true,
-          isSuccess: false,
-          isLoading: false
-        };
-      }
-
-      await Actions.GetOtp({
-        values: {
-          password,
-          phone
-        },
-        onError,
-        onSettled,
-        onSuccess,
-        onLoading
-      });
+      Schema.validate(values, { abortEarly: false })
+        .then(() => {
+          Actions.GetOtp({
+            values: values,
+            onError,
+            onSettled,
+            onSuccess,
+            onLoading
+          });
+        })
+        .catch(err => {
+          err.inner.forEach((e: any) => {
+            errorMessages[e.path] = e.message;
+          });
+          console.log(errorMessages);
+        });
 
       return {
-        isError: false,
-        isSuccess: true,
-        isLoading: false,
-        isValid: true
+        errors: errorMessages
       };
     },
-    {}
+    initialState
   );
 
   return <form action={action}>{children({ state, pending })}</form>;

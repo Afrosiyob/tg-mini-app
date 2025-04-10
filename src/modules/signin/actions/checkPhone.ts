@@ -29,7 +29,6 @@ async function CheckPhone({ values, onSuccess, onError, onLoading }: IProps): Pr
 
     return {
       isError: false,
-      isSuccess: true,
       isLoading: false,
       isValid: true
     };
@@ -37,7 +36,6 @@ async function CheckPhone({ values, onSuccess, onError, onLoading }: IProps): Pr
     onError?.('error');
     return {
       isError: true,
-      isSuccess: false,
       isLoading: false,
       isValid: false
     };

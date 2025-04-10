@@ -16,9 +16,9 @@ const Page = () => {
       <div>
         <LocaleSwitcher />
         <h1>{t('header')}</h1>
-        <Link href="/mobile/auth/signin">sign in</Link>
+        <Link href="/auth/signin">sign in</Link>
         <br />
-        <Link href="/mobile/auth/signup">sign up</Link>
+        <Link href="/auth/signup">sign up</Link>
       </div>
     </BackPage>
   );

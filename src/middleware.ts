@@ -5,8 +5,8 @@ import { cookies } from 'next/headers';
 import { v4 as uuidv4 } from 'uuid';
 
 // 1. Specify protected and public routes
-const protectedRoutes = ['/mobile/dashboard'];
-const publicRoutes = ['/mobile/auth/signin', '/mobile/auth/signup', '/'];
+const protectedRoutes = ['/dashboard'];
+const publicRoutes = ['/auth/signin', '/auth/signup', '/'];
 
 export default async function middleware(req: NextRequest) {
   // 2. Check if the current route is protected or public
@@ -32,16 +32,16 @@ export default async function middleware(req: NextRequest) {
 
   // 4. Redirect to /login if the user is not authenticated
   if (isProtectedRoute && !accessToken) {
-    return NextResponse.redirect(new URL('/mobile/auth/signin', req.nextUrl));
+    return NextResponse.redirect(new URL('/auth/signin', req.nextUrl));
   }
 
   // 5. Redirect to /dashboard if the user is authenticated
   if (isPublicRoute && accessToken) {
-    return NextResponse.redirect(new URL('/mobile/dashboard', req.nextUrl));
+    return NextResponse.redirect(new URL('/dashboard', req.nextUrl));
   }
 
   // if (isPublicRoute && !accessToken && req.nextUrl.pathname.startsWith('/')) {
-  //   return NextResponse.redirect(new URL('/mobile/auth/signin', req.nextUrl));
+  //   return NextResponse.redirect(new URL('/auth/signin', req.nextUrl));
   // }
 
   return NextResponse.next();
